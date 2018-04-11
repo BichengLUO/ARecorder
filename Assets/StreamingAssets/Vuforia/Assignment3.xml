@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="qcar_config.xsd">
+  <Tracking>
+    <ImageTarget name="stones" size="9.300000 6.510000" />
+    <ImageTarget name="tarmac" size="9.300000 6.510000" />
+    <ImageTarget name="vortex" size="2.000000 6.000000" />
+    <ImageTarget name="Acid" size="2.000000 6.000000" />
+    <ImageTarget name="LegoCollection" size="2.000000 6.000000" />
+    <ImageTarget name="Autumn" size="2.000000 6.000000" />
+    <CylinderTarget name="can" sideLength="5.000000"/>
+  </Tracking>
+</QCARConfig>
