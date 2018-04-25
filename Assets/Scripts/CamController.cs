@@ -91,7 +91,7 @@ public class CamController : MonoBehaviour
 
 					unsafe {
 						fixed (byte *pixelData = image.Pixels) {
-							processBuffer ((int)Time.time * 600, image.Width, image.Height, image.Stride, (IntPtr)pixelData);
+							processBuffer ((int)(Time.time * 600), image.Width, image.Height, image.Stride, (IntPtr)pixelData);
 						}
 					}
 				}

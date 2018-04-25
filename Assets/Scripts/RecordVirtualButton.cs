@@ -34,7 +34,7 @@ public class RecordVirtualButton : MonoBehaviour, IVirtualButtonEventHandler {
 		if (toState == RecordingState.Recording) {
 			buttonTextMesh.text = "Stop";
 			buttonCube.GetComponent<Renderer>().material.color = new Color32(255, 0, 0, 195);
-			startRecording(1000, 800);
+			startRecording(200, 150);
 		} else if (toState == RecordingState.Idle) {
 			buttonTextMesh.text = "Record";
 			buttonCube.GetComponent<Renderer>().material.color = new Color32(8, 103, 16, 195);
