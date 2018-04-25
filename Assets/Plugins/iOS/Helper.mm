@@ -111,7 +111,7 @@ extern "C" {
     //            [data appendBytes:baseAddress+(r+i)*width+c length:stride];
     //        }
             
-            CVPixelBufferCreateWithBytes(NULL, width, height, kCVPixelFormatType_RGB, pixelData, stride, NULL, NULL, NULL, &pixelBufferOut);
+            CVPixelBufferCreateWithBytes(NULL, width, height, kCVPixelFormatType_24RGB, pixelData, stride, NULL, NULL, NULL, &pixelBufferOut);
 
             if ([adaptor.assetWriterInput isReadyForMoreMediaData]) {
                 // [assetWriterInput appendSampleBuffer:sampleBuffer];
