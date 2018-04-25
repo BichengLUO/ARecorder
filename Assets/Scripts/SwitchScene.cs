@@ -24,4 +24,9 @@ public class SwitchScene : MonoBehaviour {
 		Debug.Log("Scene2 loading: ");
 		SceneManager.LoadScene(2);
 	}
+
+	public void OnClickBackButton() {
+		Debug.Log("Scene2 loading: ");
+		SceneManager.LoadScene(0);
+	}	
 }
