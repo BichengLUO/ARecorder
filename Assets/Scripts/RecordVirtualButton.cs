@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.Runtime.InteropServices;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Vuforia;
@@ -13,6 +14,7 @@ public class RecordVirtualButton : MonoBehaviour, IVirtualButtonEventHandler {
 
 	void Start() {
 		virtualButton.GetComponent<VirtualButtonBehaviour>().RegisterEventHandler(this);
+		initHelper ();
 	}
 	public void OnButtonPressed(VirtualButtonBehaviour vb) {
 		if (currentRecordingState == RecordingState.Idle) {
@@ -32,13 +34,21 @@ public class RecordVirtualButton : MonoBehaviour, IVirtualButtonEventHandler {
 		if (toState == RecordingState.Recording) {
 			buttonTextMesh.text = "Stop";
 			buttonCube.GetComponent<Renderer>().material.color = new Color32(255, 0, 0, 195);
+			startRecording();
 		} else if (toState == RecordingState.Idle) {
 			buttonTextMesh.text = "Record";
 			buttonCube.GetComponent<Renderer>().material.color = new Color32(8, 103, 16, 195);
+			stopRecording();
 		} else if (toState == RecordingState.Prepare) {
 			buttonTextMesh.text = "Prepare";
 			buttonCube.GetComponent<Renderer>().material.color = new Color32(191, 173, 27, 195);
 		}
 	}
 
+	[DllImport ("__Internal")]
+	private static extern void initHelper();
+	[DllImport ("__Internal")]
+	private static extern void startRecording();
+	[DllImport ("__Internal")]
+	private static extern void stopRecording();
 }
