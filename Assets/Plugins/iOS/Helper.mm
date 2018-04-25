@@ -37,17 +37,17 @@ extern "C" {
         assetWriter = [AVAssetWriter assetWriterWithURL:[NSURL fileURLWithPath:outputFilePath] fileType:AVFileTypeMPEG4 error:&error];
         
         NSDictionary *videoSettings = @{
-                                        AVVideoCodecKey: AVVideoCodecTypeH264
-                                        //        AVVideoWidthKey: [NSNumber numberWithFloat:size.width],
-                                        //        AVVideoHeightKey: [NSNumber numberWithFloat:size.height]
+                                        AVVideoCodecKey: AVVideoCodecTypeH264,
+                                                AVVideoWidthKey: [NSNumber numberWithFloat:size.width],
+                                                AVVideoHeightKey: [NSNumber numberWithFloat:size.height]
                                         };
         assetWriterInput = [AVAssetWriterInput assetWriterInputWithMediaType:AVMediaTypeVideo outputSettings:videoSettings];
         [assetWriterInput setExpectsMediaDataInRealTime:YES];
         
         NSDictionary *pixelBufferAttributes = @{
-                                                (NSString *)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_32BGRA)
-                                                //        (NSString *)kCVPixelBufferWidthKey: [NSNumber numberWithFloat:size.width],
-                                                //        (NSString *)kCVPixelBufferHeightKey: [NSNumber numberWithFloat:size.height]
+                                                (NSString *)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_24RGB),
+                                                        (NSString *)kCVPixelBufferWidthKey: [NSNumber numberWithFloat:size.width],
+                                                        (NSString *)kCVPixelBufferHeightKey: [NSNumber numberWithFloat:size.height]
                                                 };
         adaptor = [AVAssetWriterInputPixelBufferAdaptor assetWriterInputPixelBufferAdaptorWithAssetWriterInput:assetWriterInput
                                                                                    sourcePixelBufferAttributes:pixelBufferAttributes];
@@ -61,11 +61,11 @@ extern "C" {
         lastTimestamp = kCMTimeZero;
     }
 
-    void startRecording() {
+    void startRecording(int width, int height) {
         NSLog(@"start recording...");
         isRecording = YES;
         
-        size = CGSizeMake(240, 200);
+        size = CGSizeMake(width, height);
         setupAssetWriter();
 
         [assetWriter startWriting];
@@ -111,7 +111,7 @@ extern "C" {
     //            [data appendBytes:baseAddress+(r+i)*width+c length:stride];
     //        }
             
-            CVPixelBufferCreateWithBytes(NULL, width, height, kCVPixelFormatType_32BGRA, pixelData, stride, NULL, NULL, NULL, &pixelBufferOut);
+            CVPixelBufferCreateWithBytes(NULL, width, height, kCVPixelFormatType_RGB, pixelData, stride, NULL, NULL, NULL, &pixelBufferOut);
 
             if ([adaptor.assetWriterInput isReadyForMoreMediaData]) {
                 // [assetWriterInput appendSampleBuffer:sampleBuffer];
