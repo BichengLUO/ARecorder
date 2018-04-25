@@ -66,7 +66,7 @@ MonoBehaviour:
     autoInitTracker: 0
     autoStartTracker: 0
   webcam:
-    deviceNameSetInEditor: 
+    deviceNameSetInEditor: HD Pro Webcam C920
     flipHorizontally: 0
     turnOffWebCam: 0
     renderTextureLayer: 30
