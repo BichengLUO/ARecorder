@@ -11,6 +11,7 @@ public class RecordVirtualButton : MonoBehaviour, IVirtualButtonEventHandler {
 	public TextMesh buttonTextMesh;
 	public GameObject buttonCube;
 	public RecordingState currentRecordingState = RecordingState.Idle;
+	public CamController camController;
 
 	void Start() {
 		virtualButton.GetComponent<VirtualButtonBehaviour>().RegisterEventHandler(this);
@@ -34,7 +35,7 @@ public class RecordVirtualButton : MonoBehaviour, IVirtualButtonEventHandler {
 		if (toState == RecordingState.Recording) {
 			buttonTextMesh.text = "Stop";
 			buttonCube.GetComponent<Renderer>().material.color = new Color32(255, 0, 0, 195);
-			startRecording(200, 150);
+			startRecording(camController.cameraWidth, camController.cameraHeight);
 		} else if (toState == RecordingState.Idle) {
 			buttonTextMesh.text = "Record";
 			buttonCube.GetComponent<Renderer>().material.color = new Color32(8, 103, 16, 195);

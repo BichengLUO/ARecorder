@@ -721,6 +721,7 @@ MonoBehaviour:
   buttonTextMesh: {fileID: 1265974976}
   buttonCube: {fileID: 780232955}
   currentRecordingState: 0
+  camController: {fileID: 933889613}
 --- !u!4 &837182645 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4723989707120794, guid: a12dfcc6dd9d146c7bcdf400ea2d56b2,
@@ -967,6 +968,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 983e5eb3b25de4b33a16e7be42536d95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cameraWidth: 0
+  cameraHeight: 0
 --- !u!1 &1198940454
 GameObject:
   m_ObjectHideFlags: 0

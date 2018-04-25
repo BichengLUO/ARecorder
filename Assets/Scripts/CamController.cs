@@ -7,6 +7,8 @@ using Vuforia;
 public class CamController : MonoBehaviour
 {
 
+	public int cameraWidth;
+	public int cameraHeight;
 	#region PRIVATE_MEMBERS
 
 	private Image.PIXEL_FORMAT mPixelFormat = Image.PIXEL_FORMAT.UNKNOWN_FORMAT;
@@ -77,7 +79,8 @@ public class CamController : MonoBehaviour
 //					);
 
 					byte[] pixels = image.Pixels;
-
+					cameraWidth = image.Width;
+					cameraHeight = image.Height;
 //					if (pixels != null && pixels.Length > 0)
 //					{
 //						Debug.Log(
