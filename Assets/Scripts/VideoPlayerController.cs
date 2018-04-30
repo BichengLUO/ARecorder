@@ -33,11 +33,11 @@ public class VideoPlayerController : MonoBehaviour {
 
 	public void PlayOrPause() {
 		if (videoPlayer.isPlaying) {
-			videoPlayer.Pause ();
+			videoPlayer.Pause();
 			rend.sharedMaterial = playButtonMaterial;
 			Debug.Log("Pause video at URL: " + videoPlayer.url);
 		} else {
-			videoPlayer.Play ();
+			videoPlayer.Play();
 			rend.sharedMaterial = pauseButtonMaterial;
 			Debug.Log("Play video at URL: " + videoPlayer.url);
 		}
