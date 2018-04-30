@@ -11,7 +11,10 @@ public class PlaceMultipleVideos : MonoBehaviour {
 		PersistentStorage.init();
 		list = PersistentStorage.findForImageTargetId(gameObject.name);
 		foreach (Row row in list) {
-			Vector3 position = transform.TransformPoint(row.localPosition);
+			Vector3 shrinkedPos = new Vector3(row.localPosition.x / 3.0f,
+											  row.localPosition.y / 3.0f,
+											  row.localPosition.z / 3.0f);
+			Vector3 position = transform.TransformPoint(shrinkedPos);
 			Quaternion rotation = transform.rotation * row.localRotation;
 			GameObject videoPlayer = Instantiate(videoPlayerPrefab, transform);
 			videoPlayer.transform.position = position;

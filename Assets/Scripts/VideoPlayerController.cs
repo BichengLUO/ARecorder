@@ -35,19 +35,21 @@ public class VideoPlayerController : MonoBehaviour {
 		if (videoPlayer.isPlaying) {
 			videoPlayer.Pause ();
 			rend.sharedMaterial = playButtonMaterial;
+			Debug.Log("Pause video at URL: " + videoPlayer.url);
 		} else {
 			videoPlayer.Play ();
 			rend.sharedMaterial = pauseButtonMaterial;
+			Debug.Log("Play video at URL: " + videoPlayer.url);
 		}
 	}
 
 	public void MoveForward() {
 		if (videoPlayer.isPlaying) {
-			double fraction = (double)videoPlayer.frame / (double)videoPlayer.clip.frameCount + (double)0.05;
+			double fraction = (double)videoPlayer.frame / (double)videoPlayer.frameCount + (double)0.05;
 			if (fraction > (double)1.0) {
 				fraction = (double)0.0;
 			} 
-			double frame = (double)videoPlayer.clip.frameCount * fraction;
+			double frame = (double)videoPlayer.frameCount * fraction;
 			videoPlayer.frame = (long)frame;
 		}
 	}
