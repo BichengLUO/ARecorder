@@ -6,7 +6,9 @@
 //  Copyright © 2018 Sylvanus. All rights reserved.
 //
 
-#import "Helper.h"
+#import <UIKit/UIKit.h>
+#import <AVFoundation/AVFoundation.h>
+#import <Photos/Photos.h>
 
 BOOL isRecording;
 
@@ -21,13 +23,16 @@ CMTime lastTimestamp;
 
 extern "C" {
     
-    void setupAssetWriter() {
+    void setupAssetWriter(char *videoPath) {
         NSLog(@"configuring AssetWriter...");
         
         NSString *documentsDirectoryPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-        NSString *outputFileName = @"outputFile.m4v";
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH-mm-ss'.mp4'"];
+        NSString *outputFileName = [dateFormatter stringFromDate:[NSDate date]];
         outputFilePath = [NSString stringWithFormat:@"%@/%@", documentsDirectoryPath, outputFileName];
-        
+        NSData *outputFileData = [outputFilePath dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+        memcpy(videoPath, [outputFileData bytes], outputFileData.length);
         NSError *error = nil;
         NSFileManager *fileManager = [NSFileManager defaultManager];
         if ([fileManager fileExistsAtPath:outputFilePath]) {
@@ -61,12 +66,12 @@ extern "C" {
         lastTimestamp = kCMTimeZero;
     }
 
-    void startRecording(int width, int height) {
+    void startRecording(int width, int height, char *videoPath) {
         NSLog(@"start recording...");
         isRecording = YES;
         
         size = CGSizeMake(width, height);
-        setupAssetWriter();
+        setupAssetWriter(videoPath);
 
         [assetWriter startWriting];
         [assetWriter startSessionAtSourceTime:lastTimestamp];
@@ -79,6 +84,8 @@ extern "C" {
         [assetWriterInput markAsFinished];
         [assetWriter finishWritingWithCompletionHandler:^{
             if ([assetWriter status] == AVAssetWriterStatusCompleted) {
+                NSLog(@"Successfully save to documents");
+                /*
                 NSFileManager *fileManager = [NSFileManager defaultManager];
                 if ([fileManager fileExistsAtPath:outputFilePath]) {
                     [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
@@ -91,6 +98,7 @@ extern "C" {
                         }
                     }];
                 }
+                */
             } else {
                 NSLog(@"%@", [assetWriter error]);
             }

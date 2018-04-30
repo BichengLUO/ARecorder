@@ -50,7 +50,7 @@ public class PlayHeadMover : MonoBehaviour {
 
 			float newXPosition = prevHeadTransform.position.x;
 			double fraction = (double)(newXPosition - startPosition.x) / (double)(endPosition.x - startPosition.x);
-			double frame = (double)videoPlayer.clip.frameCount * fraction;
+			double frame = (double)videoPlayer.frameCount * fraction;
 
 			videoPlayer.frame = (long)frame;
 			videoPlayer.Play ();
