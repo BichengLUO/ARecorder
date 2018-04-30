@@ -1,6 +1,8 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using Vuforia;
 
@@ -15,6 +17,7 @@ public class RecordVirtualButton : MonoBehaviour, IVirtualButtonEventHandler {
 
 	void Start() {
 		virtualButton.GetComponent<VirtualButtonBehaviour>().RegisterEventHandler(this);
+		PersistentStorage.init();
 		initHelper();
 	}
 	public void OnButtonPressed(VirtualButtonBehaviour vb) {
@@ -35,7 +38,16 @@ public class RecordVirtualButton : MonoBehaviour, IVirtualButtonEventHandler {
 		if (toState == RecordingState.Recording) {
 			buttonTextMesh.text = "Stop";
 			buttonCube.GetComponent<Renderer>().material.color = new Color32(255, 0, 0, 195);
-			startRecording(camController.cameraWidth, camController.cameraHeight);
+			byte[] videoPath = new byte[128];
+			Array.Clear(videoPath, 0, videoPath.Length);
+			startRecording(camController.cameraWidth, camController.cameraHeight, videoPath);
+			
+			Row row = new Row();
+			row.imageTargetId = gameObject.name;
+			row.localPosition = transform.InverseTransformPoint(Camera.main.transform.position);
+			row.localRotation = Camera.main.transform.rotation * Quaternion.Inverse(transform.rotation);
+			row.videoPath = Encoding.ASCII.GetString(videoPath);
+			PersistentStorage.appendNewRow(row);
 		} else if (toState == RecordingState.Idle) {
 			buttonTextMesh.text = "Record";
 			buttonCube.GetComponent<Renderer>().material.color = new Color32(8, 103, 16, 195);
@@ -49,7 +61,7 @@ public class RecordVirtualButton : MonoBehaviour, IVirtualButtonEventHandler {
 	[DllImport ("__Internal")]
 	private static extern void initHelper();
 	[DllImport ("__Internal")]
-	private static extern void startRecording(int width, int height);
+	private static extern void startRecording(int width, int height, byte[] videoPath);
 	[DllImport ("__Internal")]
 	private static extern void stopRecording();
 }
