@@ -15,7 +15,7 @@ public class RecordVirtualButton : MonoBehaviour, IVirtualButtonEventHandler {
 
 	void Start() {
 		virtualButton.GetComponent<VirtualButtonBehaviour>().RegisterEventHandler(this);
-		initHelper ();
+		initHelper();
 	}
 	public void OnButtonPressed(VirtualButtonBehaviour vb) {
 		if (currentRecordingState == RecordingState.Idle) {
