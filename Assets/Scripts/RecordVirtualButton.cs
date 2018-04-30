@@ -20,11 +20,15 @@ public class RecordVirtualButton : MonoBehaviour, IVirtualButtonEventHandler {
 	public RecordingState currentRecordingState = RecordingState.Idle;
 	public CamController camController;
 	public AmazonS3Client S3Client;
+	public GameObject loading;
+	public Row currentRow;
 
 	void Start() {
 		virtualButton.GetComponent<VirtualButtonBehaviour>().RegisterEventHandler(this);
 		PersistentStorage.init();
+#if !UNITY_EDITOR
 		initHelper();
+#endif
 
 		UnityInitializer.AttachToGameObject(this.gameObject);
 		AWSConfigs.HttpClient = AWSConfigs.HttpClientOption.UnityWebRequest;
@@ -38,7 +42,7 @@ public class RecordVirtualButton : MonoBehaviour, IVirtualButtonEventHandler {
 			"us-east-1:4616ae63-91e5-49e2-b3b1-4844f7af97f2", // Identity pool ID
 			RegionEndpoint.USEast1 // Region
 		);
-		S3Client = new AmazonS3Client(credentials);
+		S3Client = new AmazonS3Client(credentials, RegionEndpoint.USEast1);
 	}
 	public void OnButtonPressed(VirtualButtonBehaviour vb) {
 		if (currentRecordingState == RecordingState.Idle) {
@@ -60,18 +64,21 @@ public class RecordVirtualButton : MonoBehaviour, IVirtualButtonEventHandler {
 			buttonCube.GetComponent<Renderer>().material.color = new Color32(255, 0, 0, 195);
 			byte[] videoPath = new byte[128];
 			Array.Clear(videoPath, 0, videoPath.Length);
+#if !UNITY_EDITOR
 			startRecording(camController.cameraWidth, camController.cameraHeight, videoPath);
-			
-			Row row = new Row();
-			row.imageTargetId = gameObject.name;
-			row.localPosition = transform.InverseTransformPoint(Camera.main.transform.position);
-			row.localRotation = Camera.main.transform.rotation * Quaternion.Inverse(transform.rotation);
-			row.videoPath = Encoding.ASCII.GetString(videoPath);
-			postVideo(row);
+#endif		
+			currentRow = new Row();
+			currentRow.imageTargetId = gameObject.name;
+			currentRow.localPosition = transform.InverseTransformPoint(Camera.main.transform.position);
+			currentRow.localRotation = Camera.main.transform.rotation * Quaternion.Inverse(transform.rotation);
+			currentRow.videoPath = Encoding.ASCII.GetString(videoPath);
 		} else if (toState == RecordingState.Idle) {
 			buttonTextMesh.text = "Record";
 			buttonCube.GetComponent<Renderer>().material.color = new Color32(8, 103, 16, 195);
+#if !UNITY_EDITOR
 			stopRecording();
+#endif
+			postVideo(currentRow);
 		} else if (toState == RecordingState.Prepare) {
 			buttonTextMesh.text = "Prepare";
 			buttonCube.GetComponent<Renderer>().material.color = new Color32(191, 173, 27, 195);
@@ -79,8 +86,11 @@ public class RecordVirtualButton : MonoBehaviour, IVirtualButtonEventHandler {
 	}
 
 	public void postVideo(Row row) {
-		var stream = new FileStream(row.videoPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+		Debug.Log("Post video: " + row.videoPath);
+		loading.SetActive(true);
+		FileStream stream = File.Open(row.videoPath, FileMode.Open, FileAccess.Read, FileShare.Read);
 		string key = Path.GetFileName(row.videoPath);
+		Debug.Log("Key: " + key);
 		var request = new PostObjectRequest()
 		{
 			Bucket = "arecorder-video-files",
@@ -90,6 +100,8 @@ public class RecordVirtualButton : MonoBehaviour, IVirtualButtonEventHandler {
 		};
 		S3Client.PostObjectAsync(request, (responseObj) =>
 		{
+			Debug.Log("Finish posting: " + row.videoPath);
+			loading.SetActive(false);
 			if (responseObj.Exception == null)
 			{
 				row.videoPath = "https://s3.amazonaws.com/arecorder-video-files/" + key;

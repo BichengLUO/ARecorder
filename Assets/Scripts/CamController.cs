@@ -22,8 +22,11 @@ public class CamController : MonoBehaviour
 
 	void Start()
 	{
-
+#if !UNITY_EDITOR
 		mPixelFormat = Image.PIXEL_FORMAT.RGB888; // Use RGB888 for mobile
+#else
+		mPixelFormat = Image.PIXEL_FORMAT.GRAYSCALE;
+#endif
 
 		// Register Vuforia life-cycle callbacks:
 		VuforiaARController.Instance.RegisterVuforiaStartedCallback(OnVuforiaStarted);
@@ -91,12 +94,13 @@ public class CamController : MonoBehaviour
 //						);
 //						Debug.Log (pixels.Length);
 //					}
-
+#if !UNITY_EDITOR
 					unsafe {
 						fixed (byte *pixelData = image.Pixels) {
 							processBuffer ((int)(Time.time * 600), image.Width, image.Height, image.Stride, (IntPtr)pixelData);
 						}
 					}
+#endif
 				}
 			}
 		}
