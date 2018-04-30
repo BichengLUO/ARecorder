@@ -26,7 +26,7 @@ public class VideoPlayerController : MonoBehaviour {
 	void Update () {
 		bool stopHead = playHead.transform.GetComponent<PlayHeadMover> ().stopHead;
 		if (videoPlayer.isPlaying && !stopHead) {
-			double fraction = (double)videoPlayer.frame / (double)videoPlayer.clip.frameCount;
+			double fraction = (double)videoPlayer.frame / (double)videoPlayer.frameCount;
 			playHead.transform.GetComponent<PlayHeadMover> ().MovePlayhead (fraction);
 		}
 	}

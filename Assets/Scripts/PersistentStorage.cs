@@ -9,9 +9,11 @@ public class PersistentStorage {
 	public static List<Row> list = new List<Row>();
 	public static void init() {
 		filePath = Application.persistentDataPath + "/storage.csv";
+		Debug.Log("Storage path: " + filePath);
 		if (!File.Exists(filePath)) {
 			File.CreateText(filePath);
 		}
+		list.Clear();
 		using (StreamReader sr = File.OpenText(filePath)) {
 			string line;
 			while((line = sr.ReadLine()) != null) {
