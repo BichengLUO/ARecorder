@@ -13,7 +13,7 @@
 BOOL isRecording;
 
 CGSize size;
-CGSRect frame;
+int frame_x, frame_y, frame_w, frame_h;
 AVCaptureSession *session;
 
 AVAssetWriter *assetWriter;
@@ -72,7 +72,10 @@ extern "C" {
         isRecording = YES;
         
         size = CGSizeMake(width, height);
-        frame = CGRectMake(x, y, w, h);
+        frame_x = x;
+        frame_y = y;
+        frame_w = w;
+        frame_h = h;
         setupAssetWriter(videoPath);
 
         [assetWriter startWriting];
@@ -113,13 +116,13 @@ extern "C" {
         if (isRecording) {
             CVPixelBufferRef pixelBufferOut;
 
-            int span = 3*sizeof(char);
-            NSMutableData *data = [NSMutableData dataWithCapacity:frame.width*frame.height*span];
-            for (int i = 0; i<frame.height; i++) {
-                [data appendBytes:baseAddress+((frame.x+i)*width+frame.y)*span length:frame.width*span];
+            int span = 3 * sizeof(char);
+            NSMutableData *data = [NSMutableData dataWithCapacity:frame_w * frame_h * span];
+            for (int i = 0; i< frame_h; i++) {
+                [data appendBytes:baseAddress+((frame_x + i) * width + frame_y) * span length:frame_w * span];
             }
             
-            CVPixelBufferCreateWithBytes(NULL, frame.width, frame.height, kCVPixelFormatType_24RGB, baseAddress, frame.width*span, NULL, NULL, NULL, &pixelBufferOut);
+            CVPixelBufferCreateWithBytes(NULL, frame_w, frame_h, kCVPixelFormatType_24RGB, baseAddress, frame_w * span, NULL, NULL, NULL, &pixelBufferOut);
 
             if ([adaptor.assetWriterInput isReadyForMoreMediaData]) {
                 // [assetWriterInput appendSampleBuffer:sampleBuffer];

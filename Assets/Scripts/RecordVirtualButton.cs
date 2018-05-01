@@ -62,7 +62,7 @@ public class RecordVirtualButton : MonoBehaviour, IVirtualButtonEventHandler {
 			Debug.LogFormat("Video dimension: {0}, {1}", camController.cameraWidth, camController.cameraHeight);
 			Debug.LogFormat("Video rect: {0}", videoRect);
 #if !UNITY_EDITOR
-			startRecording(camController.cameraWidth, camController.cameraHeight, videoPath);
+			startRecording(camController.cameraWidth, camController.cameraHeight, (int)videoRect.x, (int)videoRect.y, (int)videoRect.width, (int)videoRect.height, videoPath);
 #endif		
 			currentRow = new Row();
 			currentRow.imageTargetId = gameObject.name;
@@ -85,7 +85,7 @@ public class RecordVirtualButton : MonoBehaviour, IVirtualButtonEventHandler {
 	[DllImport ("__Internal")]
 	private static extern void initHelper();
 	[DllImport ("__Internal")]
-	private static extern void startRecording(int width, int height, byte[] videoPath);
+	private static extern void startRecording(int width, int height, int x, int y, int w, int h, byte[] videoPath);
 	[DllImport ("__Internal")]
 	private static extern void stopRecording();
 }
