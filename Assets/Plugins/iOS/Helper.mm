@@ -13,6 +13,7 @@
 BOOL isRecording;
 
 CGSize size;
+CGSRect frame;
 AVCaptureSession *session;
 
 AVAssetWriter *assetWriter;
@@ -66,11 +67,12 @@ extern "C" {
         lastTimestamp = kCMTimeZero;
     }
 
-    void startRecording(int width, int height, char *videoPath) {
+    void startRecording(int width, int height, int x, int y, int w, int h, char *videoPath) {
         NSLog(@"start recording...");
         isRecording = YES;
         
         size = CGSizeMake(width, height);
+        frame = CGRectMake(x, y, w, h);
         setupAssetWriter(videoPath);
 
         [assetWriter startWriting];
@@ -106,20 +108,18 @@ extern "C" {
     }
 
     void processBuffer(int ts, int width, int height, int stride, int *pixelData) {
+        char *baseAddress = (char *)pixelData;
         lastTimestamp = CMTimeMake(ts, 600);
         if (isRecording) {
             CVPixelBufferRef pixelBufferOut;
 
-    //        NSMutableData *data = [NSMutableData dataWithCapacity:size.width*size.height*sizeof(int)];
-    //
-    //        size_t r = (height-size.height)/2;
-    //        size_t c = (width-size.width)/2;
-    //        size_t stride = size.width*sizeof(int);
-    //        for (int i = 0; i<size.height; i++) {
-    //            [data appendBytes:baseAddress+(r+i)*width+c length:stride];
-    //        }
+            int span = 3*sizeof(char);
+            NSMutableData *data = [NSMutableData dataWithCapacity:frame.width*frame.height*span];
+            for (int i = 0; i<frame.height; i++) {
+                [data appendBytes:baseAddress+((frame.x+i)*width+frame.y)*span length:frame.width*span];
+            }
             
-            CVPixelBufferCreateWithBytes(NULL, width, height, kCVPixelFormatType_24RGB, pixelData, stride, NULL, NULL, NULL, &pixelBufferOut);
+            CVPixelBufferCreateWithBytes(NULL, frame.width, frame.height, kCVPixelFormatType_24RGB, baseAddress, frame.width*span, NULL, NULL, NULL, &pixelBufferOut);
 
             if ([adaptor.assetWriterInput isReadyForMoreMediaData]) {
                 // [assetWriterInput appendSampleBuffer:sampleBuffer];
