@@ -6,10 +6,6 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using Vuforia;
-using Amazon;
-using Amazon.S3;
-using Amazon.S3.Model;
-using Amazon.CognitoIdentity;
 
 public enum RecordingState {Idle, Prepare, Recording};
 public class RecordVirtualButton : MonoBehaviour, IVirtualButtonEventHandler {
@@ -19,7 +15,6 @@ public class RecordVirtualButton : MonoBehaviour, IVirtualButtonEventHandler {
 	public GameObject buttonCube;
 	public RecordingState currentRecordingState = RecordingState.Idle;
 	public CamController camController;
-	public AmazonS3Client S3Client;
 	public GameObject loading;
 	public Row currentRow;
 
@@ -29,20 +24,6 @@ public class RecordVirtualButton : MonoBehaviour, IVirtualButtonEventHandler {
 #if !UNITY_EDITOR
 		initHelper();
 #endif
-
-		UnityInitializer.AttachToGameObject(this.gameObject);
-		AWSConfigs.HttpClient = AWSConfigs.HttpClientOption.UnityWebRequest;
-		AWSConfigs.LoggingConfig.LogTo = LoggingOptions.UnityLogger;
-		AWSConfigs.LoggingConfig.LogResponses = ResponseLoggingOption.Always;
-		AWSConfigs.LoggingConfig.LogMetrics = true;
-		AWSConfigs.CorrectForClockSkew = true;
-		
-		// Initialize the Amazon Cognito credentials provider
-		CognitoAWSCredentials credentials = new CognitoAWSCredentials (
-			"us-east-1:4616ae63-91e5-49e2-b3b1-4844f7af97f2", // Identity pool ID
-			RegionEndpoint.USEast1 // Region
-		);
-		S3Client = new AmazonS3Client(credentials, RegionEndpoint.USEast1);
 	}
 	public void OnButtonPressed(VirtualButtonBehaviour vb) {
 		if (currentRecordingState == RecordingState.Idle) {
@@ -72,47 +53,17 @@ public class RecordVirtualButton : MonoBehaviour, IVirtualButtonEventHandler {
 			currentRow.localPosition = transform.InverseTransformPoint(Camera.main.transform.position);
 			currentRow.localRotation = Camera.main.transform.rotation * Quaternion.Inverse(transform.rotation);
 			currentRow.videoPath = Encoding.ASCII.GetString(videoPath);
+			PersistentStorage.appendNewRow(currentRow);
 		} else if (toState == RecordingState.Idle) {
 			buttonTextMesh.text = "Record";
 			buttonCube.GetComponent<Renderer>().material.color = new Color32(8, 103, 16, 195);
 #if !UNITY_EDITOR
 			stopRecording();
 #endif
-			postVideo(currentRow);
 		} else if (toState == RecordingState.Prepare) {
 			buttonTextMesh.text = "Prepare";
 			buttonCube.GetComponent<Renderer>().material.color = new Color32(191, 173, 27, 195);
 		}
-	}
-
-	public void postVideo(Row row) {
-		Debug.Log("Post video: " + row.videoPath);
-		loading.SetActive(true);
-		FileStream stream = File.Open(row.videoPath, FileMode.Open, FileAccess.Read, FileShare.Read);
-		string key = Path.GetFileName(row.videoPath);
-		Debug.Log("Key: " + key);
-		var request = new PostObjectRequest()
-		{
-			Bucket = "arecorder-video-files",
-			Key = key,
-			InputStream = stream,
-			CannedACL = S3CannedACL.Private
-		};
-		S3Client.PostObjectAsync(request, (responseObj) =>
-		{
-			Debug.Log("Finish posting: " + row.videoPath);
-			loading.SetActive(false);
-			if (responseObj.Exception == null)
-			{
-				row.videoPath = "https://s3.amazonaws.com/arecorder-video-files/" + key;
-				PersistentStorage.appendNewRow(row);
-				Debug.LogFormat("object {0} posted to bucket {1}", responseObj.Request.Key, responseObj.Request.Bucket);
-			}
-			else
-			{
-				Debug.LogFormat("Exception while posting the result object\n receieved error {0}", responseObj.Response.HttpStatusCode.ToString());
-			}
-		});
 	}
 
 	[DllImport ("__Internal")]
