@@ -31,7 +31,7 @@ extern "C" {
         [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH-mm-ss'.mp4'"];
         NSString *outputFileName = [dateFormatter stringFromDate:[NSDate date]];
         outputFilePath = [NSString stringWithFormat:@"%@/%@", documentsDirectoryPath, outputFileName];
-        NSData *outputFileData = [outputFilePath dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+        NSData *outputFileData = [outputFileName dataUsingEncoding:NSUTF8StringEncoding];
         memcpy(videoPath, [outputFileData bytes], outputFileData.length);
         NSError *error = nil;
         NSFileManager *fileManager = [NSFileManager defaultManager];

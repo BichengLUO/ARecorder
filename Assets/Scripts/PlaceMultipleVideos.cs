@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Video;
 
@@ -21,7 +22,7 @@ public class PlaceMultipleVideos : MonoBehaviour {
 			videoPlayer.transform.rotation = rotation;
 			GameObject videoPlane = videoPlayer.transform.Find("VideoPlane").gameObject;
 			VideoPlayer player = videoPlane.GetComponent<VideoPlayer>();
-			player.url = row.videoPath;
+			player.url = Application.persistentDataPath + "/" + row.videoPath;
 			Debug.LogFormat("Row: {0} {1}", row.imageTargetId, row.videoPath);
 		}
 	}

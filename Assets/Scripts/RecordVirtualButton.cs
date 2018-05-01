@@ -52,7 +52,7 @@ public class RecordVirtualButton : MonoBehaviour, IVirtualButtonEventHandler {
 			currentRow.imageTargetId = gameObject.name;
 			currentRow.localPosition = transform.InverseTransformPoint(Camera.main.transform.position);
 			currentRow.localRotation = Camera.main.transform.rotation * Quaternion.Inverse(transform.rotation);
-			currentRow.videoPath = Encoding.ASCII.GetString(videoPath);
+			currentRow.videoPath = Encoding.UTF8.GetString(videoPath);
 			PersistentStorage.appendNewRow(currentRow);
 		} else if (toState == RecordingState.Idle) {
 			buttonTextMesh.text = "Record";

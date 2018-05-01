@@ -27,7 +27,8 @@ public class PlayHeadMover : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		RaycastHit hitInfo3 = new RaycastHit ();
-		if (Input.GetMouseButton (0) && Physics.Raycast (Camera.main.ScreenPointToRay (Input.mousePosition), out hitInfo3) && hitInfo3.transform.tag == "processingBar") {
+		if (Input.GetMouseButton (0) && Physics.Raycast (Camera.main.ScreenPointToRay (Input.mousePosition), out hitInfo3)
+			&& hitInfo3.rigidbody.gameObject == gameObject) {
 			stopHead = true;
 			videoPlayer.Pause ();
 			Transform prevHeadTransform = this.transform;
