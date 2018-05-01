@@ -38,6 +38,15 @@ public class RecordVirtualButton : MonoBehaviour, IVirtualButtonEventHandler {
 
 	}
 
+	public Rect mapScreenToCamera(Rect screenRect, int screenWidth, int screenHeight, int videoWidth, int videoHeight) {
+		Rect videoRect = new Rect();
+		videoRect.x = (int)Math.Round(screenRect.x / screenWidth * videoWidth);
+		videoRect.y = (int)Math.Round(screenRect.y / screenHeight * videoHeight);
+		videoRect.width = (int)Math.Round(screenRect.width / screenWidth * videoWidth);
+		videoRect.height = (int)Math.Round(screenRect.height / screenHeight * videoHeight);
+		return videoRect;
+	}
+
 	public void switchStatus(RecordingState toState) {
 		currentRecordingState = toState;
 		if (toState == RecordingState.Recording) {
@@ -45,6 +54,13 @@ public class RecordVirtualButton : MonoBehaviour, IVirtualButtonEventHandler {
 			buttonCube.GetComponent<Renderer>().material.color = new Color32(255, 0, 0, 195);
 			byte[] videoPath = new byte[128];
 			Array.Clear(videoPath, 0, videoPath.Length);
+			Rect screenRect = recordingAreaSelection.GetComponent<RecordingAreaSelection>().getVideoRect();
+			Rect videoRect = mapScreenToCamera(screenRect, Screen.width, Screen.height, camController.cameraWidth, camController.cameraHeight);
+
+			Debug.LogFormat("Screen dimension: {0}, {1}", Screen.width, Screen.height);
+			Debug.LogFormat("Screen rect: {0}", screenRect);
+			Debug.LogFormat("Video dimension: {0}, {1}", camController.cameraWidth, camController.cameraHeight);
+			Debug.LogFormat("Video rect: {0}", videoRect);
 #if !UNITY_EDITOR
 			startRecording(camController.cameraWidth, camController.cameraHeight, videoPath);
 #endif		
