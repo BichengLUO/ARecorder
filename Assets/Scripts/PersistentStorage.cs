@@ -11,7 +11,8 @@ public class PersistentStorage {
 		filePath = Application.persistentDataPath + "/storage.csv";
 		Debug.Log("Storage path: " + filePath);
 		if (!File.Exists(filePath)) {
-			File.CreateText(filePath);
+			StreamWriter sw = File.CreateText(filePath);
+			sw.Close();
 		}
 		list.Clear();
 		using (StreamReader sr = File.OpenText(filePath)) {

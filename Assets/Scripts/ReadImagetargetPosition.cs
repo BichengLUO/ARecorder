@@ -11,9 +11,11 @@ public class ReadImagetargetPosition : MonoBehaviour {
 		filePath = Application.persistentDataPath + "/position.csv";
 		Debug.Log("Position path: " + filePath);
 		if (!File.Exists(filePath)) {
-			File.CreateText(filePath);
+			StreamWriter sw = File.CreateText(filePath);
+			sw.Close();
 		}
 		imagetargetPositionInfo.Clear();
+		
 		using (StreamReader sr = File.OpenText(filePath)) {
 			string line;
 			while((line = sr.ReadLine()) != null) {
