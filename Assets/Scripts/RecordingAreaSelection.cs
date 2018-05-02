@@ -52,6 +52,10 @@ public class RecordingAreaSelection : MonoBehaviour {
 		GUI.Box(rect, GUIContent.none);
 	}
 
+	public Rect getVideoRect() {
+		return lastRect;
+	}
+
 	private bool almostRectEqual(Rect r1, Rect r2, float eps) {
 		return Math.Abs(r1.x - r2.x) < eps &&
 			   Math.Abs(r1.y - r2.y) < eps &&
