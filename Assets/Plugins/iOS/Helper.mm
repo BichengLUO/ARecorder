@@ -118,11 +118,11 @@ extern "C" {
 
             int span = 3 * sizeof(char);
             NSMutableData *data = [NSMutableData dataWithCapacity:frame_w * frame_h * span];
-            for (int i = 0; i< frame_h; i++) {
-                [data appendBytes:baseAddress+((frame_x + i) * width + frame_y) * span length:frame_w * span];
+            for (int i = 0; i < frame_h; i++) {
+                [data appendBytes:baseAddress+((frame_y + i) * width + frame_x) * span length:frame_w * span];
             }
             
-            CVPixelBufferCreateWithBytes(NULL, frame_w, frame_h, kCVPixelFormatType_24RGB, baseAddress, frame_w * span, NULL, NULL, NULL, &pixelBufferOut);
+            CVPixelBufferCreateWithBytes(NULL, frame_w, frame_h, kCVPixelFormatType_24RGB, [data mutableBytes], frame_w * span, NULL, NULL, NULL, &pixelBufferOut);
 
             if ([adaptor.assetWriterInput isReadyForMoreMediaData]) {
                 // [assetWriterInput appendSampleBuffer:sampleBuffer];
