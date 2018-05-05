@@ -62,14 +62,14 @@ public class RecordVirtualButton : MonoBehaviour, IVirtualButtonEventHandler {
 			Debug.LogFormat("Video dimension: {0}, {1}", camController.cameraWidth, camController.cameraHeight);
 			Debug.LogFormat("Video rect: {0}", videoRect);
 #if !UNITY_EDITOR
-			startRecording(camController.cameraWidth, camController.cameraHeight, (int)videoRect.x, (int)videoRect.y, (int)videoRect.width, (int)videoRect.height, videoPath);
-#endif		
+			startRecording(camController.cameraWidth, camController.cameraHeight, (int)videoRect.x, (int)videoRect.y, (int)videoRect.width, (int)videoRect.height, videoPath);	
 			currentRow = new Row();
 			currentRow.imageTargetId = gameObject.name;
 			currentRow.localPosition = transform.InverseTransformPoint(Camera.main.transform.position);
 			currentRow.localRotation = Camera.main.transform.rotation * Quaternion.Inverse(transform.rotation);
 			currentRow.videoPath = Encoding.UTF8.GetString(videoPath);
 			PersistentStorage.appendNewRow(currentRow);
+#endif
 		} else if (toState == RecordingState.Idle) {
 			buttonTextMesh.text = "Record";
 			buttonCube.GetComponent<Renderer>().material.color = new Color32(8, 103, 16, 195);

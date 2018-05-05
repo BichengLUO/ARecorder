@@ -196,6 +196,36 @@ Prefab:
       propertyPath: recordVirtualButton
       value: 
       objectReference: {fileID: 837182640}
+    - target: {fileID: 114100949777702080, guid: e438fa55a408746f18e0092e8dc54c4f,
+        type: 2}
+      propertyPath: waitCount
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 114100949777702080, guid: e438fa55a408746f18e0092e8dc54c4f,
+        type: 2}
+      propertyPath: longEdge
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 114100949777702080, guid: e438fa55a408746f18e0092e8dc54c4f,
+        type: 2}
+      propertyPath: shortEdge
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 114100949777702080, guid: e438fa55a408746f18e0092e8dc54c4f,
+        type: 2}
+      propertyPath: lShapeColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114100949777702080, guid: e438fa55a408746f18e0092e8dc54c4f,
+        type: 2}
+      propertyPath: lShapeColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114100949777702080, guid: e438fa55a408746f18e0092e8dc54c4f,
+        type: 2}
+      propertyPath: lShapeColor.g
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e438fa55a408746f18e0092e8dc54c4f, type: 2}
   m_IsPrefabParent: 0
