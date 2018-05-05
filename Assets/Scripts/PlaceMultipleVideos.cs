@@ -21,7 +21,6 @@ public class PlaceMultipleVideos : MonoBehaviour {
 		list = PersistentStorage.findForImageTargetId(gameObject.name);
 		currentImagetargetInfo = ReadImagetargetPosition.findForImageTargetPosition (gameObject.name);
 		allImagetargetInfo = ReadImagetargetPosition.getAllImagetargerPositionInfo ();
-//		Debug.Log (currentImagetargetInfo.x + " " + currentImagetargetInfo.y + " " + currentImagetargetInfo.z);
 
 		foreach (Row row in list) {
 			Vector3 shrinkedPos = new Vector3(row.localPosition.x / 3.0f,
@@ -33,6 +32,8 @@ public class PlaceMultipleVideos : MonoBehaviour {
 			videoPlayer.transform.position = position;
 			videoPlayer.transform.rotation = rotation;
 			GameObject videoPlane = videoPlayer.transform.Find("VideoPlane").gameObject;
+			TextMesh videoName = videoPlayer.transform.Find("VideoName").GetComponent<TextMesh>();
+			videoName.text = row.videoPath;
 			VideoPlayer player = videoPlane.GetComponent<VideoPlayer>();
 			player.url = Application.persistentDataPath + "/" + row.videoPath;
 			Debug.LogFormat("Row: {0} {1}", row.imageTargetId, row.videoPath);
