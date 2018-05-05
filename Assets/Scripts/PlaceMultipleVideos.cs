@@ -15,7 +15,7 @@ public class PlaceMultipleVideos : MonoBehaviour {
 	public ImagetargetPositionInfo currentImagetargetInfo;
 	private Vector3 initPos = Vector3.zero;
 	// Use this for initialization
-	void Start () {
+	IEnumerator Start () {
 		PersistentStorage.init();
 		ReadImagetargetPosition.init ();
 		list = PersistentStorage.findForImageTargetId(gameObject.name);
@@ -37,6 +37,9 @@ public class PlaceMultipleVideos : MonoBehaviour {
 			VideoPlayer player = videoPlane.GetComponent<VideoPlayer>();
 			player.url = Application.persistentDataPath + "/" + row.videoPath;
 			Debug.LogFormat("Row: {0} {1}", row.imageTargetId, row.videoPath);
+			player.Play();
+			yield return new WaitForSeconds(1f); //wait the first frame to show up
+			player.Pause();
 		}
 
 		foreach (ImagetargetPositionInfo info in allImagetargetInfo) {
