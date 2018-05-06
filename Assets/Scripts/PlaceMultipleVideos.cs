@@ -7,6 +7,8 @@ using UnityEngine.Video;
 
 public class PlaceMultipleVideos : MonoBehaviour {
 	public List<Row> list;
+	public List<GameObject> videoPlayerList = new List<GameObject>();
+	public TimelineController timelineController;
 	public List<ImagetargetPositionInfo> allImagetargetInfo;
 	private List<GameObject> arrows = new List<GameObject>();
 	private List<float> arrowsToOriginDistance = new List<float> ();
@@ -20,8 +22,7 @@ public class PlaceMultipleVideos : MonoBehaviour {
 		ReadImagetargetPosition.init ();
 		list = PersistentStorage.findForImageTargetId(gameObject.name);
 		currentImagetargetInfo = ReadImagetargetPosition.findForImageTargetPosition (gameObject.name);
-		allImagetargetInfo = ReadImagetargetPosition.getAllImagetargerPositionInfo ();
-
+		allImagetargetInfo = ReadImagetargetPosition.getAllImagetargerPositionInfo();
 		foreach (Row row in list) {
 			Vector3 shrinkedPos = new Vector3(row.localPosition.x / 3.0f,
 											  row.localPosition.y / 3.0f,
@@ -29,6 +30,7 @@ public class PlaceMultipleVideos : MonoBehaviour {
 			Vector3 position = transform.TransformPoint(shrinkedPos);
 			Quaternion rotation = transform.rotation * row.localRotation;
 			GameObject videoPlayer = Instantiate(videoPlayerPrefab, transform);
+			videoPlayerList.Add(videoPlayer);
 			videoPlayer.transform.position = position;
 			videoPlayer.transform.rotation = rotation;
 			GameObject videoPlane = videoPlayer.transform.Find("VideoPlane").gameObject;
@@ -38,15 +40,15 @@ public class PlaceMultipleVideos : MonoBehaviour {
 			player.url = Application.persistentDataPath + "/" + row.videoPath;
 			Debug.LogFormat("Row: {0} {1}", row.imageTargetId, row.videoPath);
 			player.Play();
-			yield return new WaitForSeconds(1f); //wait the first frame to show up
-			player.Pause();
+			timelineController.rowVideoList.Add(new RowVideoPair(row, videoPlayer));
 		}
 
 		foreach (ImagetargetPositionInfo info in allImagetargetInfo) {
 			if (info.imageTargetId == this.gameObject.name) {
 				initPos = new Vector3 (info.x, info.y, info.z);
 				arrows.Add (null);
-				arrowsToOriginDistance.Add (0.0f);
+				arrowsToOriginDistance.Add(0.0f);
+				Debug.LogFormat("Image Target: {0} Pos: {1}", info.imageTargetId, initPos);
 			} else {
 				GameObject newArrow = GameObject.Instantiate (arrowPrefab, transform);
 				TextMesh pointedImage = newArrow.transform.Find ("pointedImage").GetComponent<TextMesh>();
@@ -55,6 +57,12 @@ public class PlaceMultipleVideos : MonoBehaviour {
 				arrows.Add (newArrow);
 				arrowsToOriginDistance.Add (distance);
 			}
+		}
+		yield return new WaitForSeconds(1f); //wait the first frame to show up
+		foreach (GameObject videoPlayer in videoPlayerList) {
+			GameObject videoPlane = videoPlayer.transform.Find("VideoPlane").gameObject;
+			VideoPlayer player = videoPlane.GetComponent<VideoPlayer>();
+			player.Pause();
 		}
 	}
 
