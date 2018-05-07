@@ -31,6 +31,10 @@ public class ReadImagetargetPosition : MonoBehaviour {
 				imagetargetPositionInfo.Add(entry);
 			}
 		}
+		if (imagetargetPositionInfo.Count == 0) {
+			imagetargetPositionInfo.Add(new ImagetargetPositionInfo("ExperimentDesk", 0, 0, 0));
+			imagetargetPositionInfo.Add(new ImagetargetPositionInfo("ExperimentDesk2", 1, 0, 0));
+		}
 	}
 
 	public static ImagetargetPositionInfo findForImageTargetPosition(string imageTargetId) {

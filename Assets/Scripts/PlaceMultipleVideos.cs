@@ -58,22 +58,21 @@ public class PlaceMultipleVideos : MonoBehaviour {
 				arrowsToOriginDistance.Add (distance);
 			}
 		}
+		Vector3 curPos = transform.position;
+		for (int i = 0; i < allImagetargetInfo.Count; i++) {
+			if (arrows [i] != null) {
+				float radians = Mathf.Atan2(initPos.z - allImagetargetInfo[i].z, initPos.x - allImagetargetInfo[i].x);
+				arrows[i].transform.eulerAngles = new Vector3(0, radians * 180 / Mathf.PI, 0);
+				arrows[i].transform.position = new Vector3(curPos.x - arrowsToOriginDistance[i] * Mathf.Cos(radians),
+															arrows[i].transform.position.y,
+															curPos.z - arrowsToOriginDistance[i] * Mathf.Sin(radians));
+			}
+		}
 		yield return new WaitForSeconds(1f); //wait the first frame to show up
 		foreach (GameObject videoPlayer in videoPlayerList) {
 			GameObject videoPlane = videoPlayer.transform.Find("VideoPlane").gameObject;
 			VideoPlayer player = videoPlane.GetComponent<VideoPlayer>();
 			player.Pause();
-		}
-	}
-
-	void Update() {
-		Vector3 curPos = transform.position;
-		for (int i = 0; i < allImagetargetInfo.Count; i++) {
-			if (arrows [i] != null) {
-				float temp = Mathf.Atan2 (curPos.z - allImagetargetInfo[i].z, curPos.x - allImagetargetInfo[i].x) * 180 / Mathf.PI;
-				arrows[i].transform.eulerAngles = new Vector3(0, temp, 0);
-				arrows[i].transform.position = new Vector3 (arrowsToOriginDistance[i] * Mathf.Cos(temp), 0, arrowsToOriginDistance[i] * Mathf.Sin(temp));
-			}
 		}
 	}
 }
