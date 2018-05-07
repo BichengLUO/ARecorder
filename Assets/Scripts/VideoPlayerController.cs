@@ -20,7 +20,6 @@ public class VideoPlayerController : MonoBehaviour {
 	void Start () {
 		rend = playButton.transform.GetComponent<Renderer> ();
 		rend.enabled = enabled;
-		videoPlayer.aspectRatio = VideoAspectRatio.FitInside;
 	}
 	
 	// Update is called once per frame

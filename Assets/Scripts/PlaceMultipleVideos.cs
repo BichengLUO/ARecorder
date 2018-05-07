@@ -73,6 +73,12 @@ public class PlaceMultipleVideos : MonoBehaviour {
 			GameObject videoPlane = videoPlayer.transform.Find("VideoPlane").gameObject;
 			VideoPlayer player = videoPlane.GetComponent<VideoPlayer>();
 			player.Pause();
+			int videoWidth = player.texture.width;
+			int videoHeight = player.texture.height;
+			Debug.LogFormat("Video width: {0} height: {1}", videoWidth, videoHeight);
+			videoPlane.transform.localScale = new Vector3(videoPlane.transform.localScale.x,
+															videoPlane.transform.localScale.y,
+															videoPlane.transform.localScale.z * videoHeight / videoWidth);
 		}
 	}
 }

@@ -62,12 +62,12 @@ public class RecordVirtualButton : MonoBehaviour, IVirtualButtonEventHandler {
 			Debug.LogFormat("Video dimension: {0}, {1}", camController.cameraWidth, camController.cameraHeight);
 			Debug.LogFormat("Video rect: {0}", videoRect);
 #if !UNITY_EDITOR
-			startRecording(camController.cameraWidth, camController.cameraHeight, (int)videoRect.x, (int)videoRect.y, (int)videoRect.width, (int)videoRect.height, videoPath);	
+			int pathLength = startRecording(camController.cameraWidth, camController.cameraHeight, (int)videoRect.x, (int)videoRect.y, (int)videoRect.width, (int)videoRect.height, videoPath);	
 			currentRow = new Row();
 			currentRow.imageTargetId = gameObject.name;
 			currentRow.localPosition = transform.InverseTransformPoint(Camera.main.transform.position);
 			currentRow.localRotation = Camera.main.transform.rotation * Quaternion.Inverse(transform.rotation);
-			currentRow.videoPath = Encoding.UTF8.GetString(videoPath);
+			currentRow.videoPath = Encoding.UTF8.GetString(videoPath, pathLength);
 			PersistentStorage.appendNewRow(currentRow);
 #endif
 		} else if (toState == RecordingState.Idle) {
@@ -85,7 +85,7 @@ public class RecordVirtualButton : MonoBehaviour, IVirtualButtonEventHandler {
 	[DllImport ("__Internal")]
 	private static extern void initHelper();
 	[DllImport ("__Internal")]
-	private static extern void startRecording(int width, int height, int x, int y, int w, int h, byte[] videoPath);
+	private static extern int startRecording(int width, int height, int x, int y, int w, int h, byte[] videoPath);
 	[DllImport ("__Internal")]
 	private static extern void stopRecording();
 }

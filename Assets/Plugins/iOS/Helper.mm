@@ -24,7 +24,7 @@ CMTime lastTimestamp;
 
 extern "C" {
     
-    void setupAssetWriter(char *videoPath) {
+    int setupAssetWriter(char *videoPath) {
         NSLog(@"configuring AssetWriter...");
         
         NSString *documentsDirectoryPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
@@ -59,6 +59,7 @@ extern "C" {
                                                                                    sourcePixelBufferAttributes:pixelBufferAttributes];
         
         [assetWriter addInput:assetWriterInput];
+        return outputFileData.length;
     }
 
     void initHelper() {
@@ -67,19 +68,20 @@ extern "C" {
         lastTimestamp = kCMTimeZero;
     }
 
-    void startRecording(int width, int height, int x, int y, int w, int h, char *videoPath) {
+    int startRecording(int width, int height, int x, int y, int w, int h, char *videoPath) {
         NSLog(@"start recording...");
         isRecording = YES;
         
-        size = CGSizeMake(width, height);
+        size = CGSizeMake(w, h);
         frame_x = x;
         frame_y = y;
         frame_w = w;
         frame_h = h;
-        setupAssetWriter(videoPath);
+        int path_length = setupAssetWriter(videoPath);
 
         [assetWriter startWriting];
         [assetWriter startSessionAtSourceTime:lastTimestamp];
+        return path_length;
     }
 
     void stopRecording() {
