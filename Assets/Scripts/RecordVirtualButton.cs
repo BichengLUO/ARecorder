@@ -67,7 +67,10 @@ public class RecordVirtualButton : MonoBehaviour, IVirtualButtonEventHandler {
 			currentRow.imageTargetId = gameObject.name;
 			currentRow.localPosition = transform.InverseTransformPoint(Camera.main.transform.position);
 			currentRow.localRotation = Camera.main.transform.rotation * Quaternion.Inverse(transform.rotation);
-			currentRow.videoPath = Encoding.UTF8.GetString(videoPath, pathLength);
+			byte[] videoPathTrim = new byte[pathLength];
+			Array.Copy(videoPath, videoPathTrim, pathLength);
+			Debug.LogFormat("Video filename: {0} length: {1}", videoPathTrim, pathLength);
+			currentRow.videoPath = Encoding.UTF8.GetString(videoPathTrim);
 			PersistentStorage.appendNewRow(currentRow);
 #endif
 		} else if (toState == RecordingState.Idle) {
