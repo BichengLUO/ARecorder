@@ -25,3 +25,6 @@ The goal is to create a solution for taking these lab notes while in the midst o
   - Video clipping not supported
 - Final solution
   - **Let's build a native Cocoa plugin for Unity!**
+
+## Demonstration
+[![video_cover](images/video_cover.png)](https://www.youtube.com/watch?v=8UH_XjswWdk)
