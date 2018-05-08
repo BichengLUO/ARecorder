@@ -1,4 +1,4 @@
-<img src="/Assets/icon_noback.png" width="100px"/>
+<img src="/Assets/icon_noback.png" width="150px"/>
 
 # ARecorder
 ## Goal
