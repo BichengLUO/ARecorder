@@ -11,10 +11,14 @@ The goal is to create a solution for taking these lab notes while in the midst o
 - Use two hand markers to select a cropping area in the air
 - Develop an iOS plugin for Unity to do the frame cropping and write video streams
 
+![recording](images/recording.gif)
+
 ## Replaying
 - Use virtual buttons to switch between different recording states
 - Use two hand markers to select a cropping area in the air
 - Develop an iOS plugin for Unity to do the frame cropping and write video streams
+
+![replaying](images/replaying.gif)
 
 ## Video Recording with Unity & iOS
 - Use `UnityEngine.VR.WSA.WebCam.VideoCapture`
