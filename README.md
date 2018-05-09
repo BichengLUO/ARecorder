@@ -27,7 +27,7 @@ The goal is to create a solution for taking these lab notes while in the midst o
 - Unity Asset Store (RockVR, AVPro Movie ...)
   - $$$ or iOS not supported
 - Use `UnityEngine.Apple.ReplayKit` or Everyplay
-  - Video clipping not supported
+  - Video cropping not supported
 - Final solution
   - **Let's build a native Cocoa plugin for Unity!**
 
