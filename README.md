@@ -14,9 +14,10 @@ The goal is to create a solution for taking these lab notes while in the midst o
 ![recording](images/recording.gif)
 
 ## Replaying
-- Use virtual buttons to switch between different recording states
-- Use two hand markers to select a cropping area in the air
-- Develop an iOS plugin for Unity to do the frame cropping and write video streams
+- Place multiple videos according to their corresponding recording poses
+- Wayfinding for other experiment desks
+- Support video replaying controls for each clip
+- Add a timeline function to view videos according to their corresponding recording time
 
 ![replaying](images/replaying.gif)
 
